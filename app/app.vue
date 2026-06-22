@@ -5,6 +5,8 @@ useHead({
     class: 'bg-amber-950',
   },
 });
+
+const { startGame, isLoading } = useMugloar();
 </script>
 
 <template>
@@ -12,7 +14,7 @@ useHead({
     class="mx-auto my-8 flex max-w-[800px] flex-col items-start gap-4 rounded-xl bg-amber-900 p-4"
   >
     <h1 class="text-xl text-amber-300">Dragons of Mugloar</h1>
-    <Button>New Game</Button>
+    <Button :disabled="isLoading" @click="startGame">New Game</Button>
     <StateDisplay />
     <TasksAndShopTabs />
   </div>

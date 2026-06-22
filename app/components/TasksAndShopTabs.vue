@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import { exampleTasks, exampleShopItems } from '../exampleData';
-
 const activeTab = ref<'tasks' | 'shop'>('tasks');
+
+const store = useMugloarStore();
+const { fetchMessages, fetchShopItems, isLoading } = useMugloar();
+
+const refresh = () => {
+  if (activeTab.value === 'tasks') {
+    fetchMessages();
+  } else {
+    fetchShopItems();
+  }
+};
 </script>
 
 <template>
@@ -15,22 +24,38 @@ const activeTab = ref<'tasks' | 'shop'>('tasks');
       </Tab>
       <div class="flex-1" />
       <div class="my-1 ml-1 mr-2">
-        <Button small>Refresh</Button>
+        <Button small :disabled="isLoading" @click="refresh">Refresh</Button>
       </div>
     </div>
     <div class="rounded-b-lg bg-amber-800 p-2">
-      <Task
-        v-if="activeTab === 'tasks'"
-        v-for="task in exampleTasks"
-        :key="task.adId"
-        v-bind="task"
-      />
-      <ShopItem
-        v-if="activeTab === 'shop'"
-        v-for="item in exampleShopItems"
-        :key="item.id"
-        v-bind="item"
-      />
+      <template v-if="activeTab === 'tasks'">
+        <Task
+          v-if="store.messages.length > 0"
+          v-for="task in store.messages"
+          :key="task.adId"
+          v-bind="task"
+        />
+        <div
+          v-if="store.messages.length === 0"
+          class="p-4 text-center text-amber-300"
+        >
+          No tasks available
+        </div>
+      </template>
+      <template v-else>
+        <ShopItem
+          v-if="store.shopItems.length > 0"
+          v-for="item in store.shopItems"
+          :key="item.id"
+          v-bind="item"
+        />
+        <div
+          v-if="store.shopItems.length === 0"
+          class="p-4 text-center text-amber-300"
+        >
+          No shop items available
+        </div>
+      </template>
     </div>
   </div>
 </template>

@@ -1,14 +1,19 @@
 <script setup lang="ts">
 defineProps<{
   small?: boolean;
+  disabled?: boolean;
 }>();
 </script>
 
 <template>
-  <button :class="[
-    'text-white bg-amber-700 rounded-md hover:bg-amber-600 active:bg-amber-500',
-    small ? 'text-sm p-1' : 'p-2'
-  ]">
+  <button
+    :disabled="disabled"
+    :class="[
+      'rounded-md bg-amber-700 text-white',
+      disabled ? 'opacity-50' : 'hover:bg-amber-600 active:bg-amber-500',
+      small ? 'p-1 text-sm' : 'p-2',
+    ]"
+  >
     <slot />
   </button>
 </template>
