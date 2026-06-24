@@ -28,8 +28,8 @@ const getEncryptionLabel = (
 <template>
   <div class="flex p-2 odd:bg-amber-900">
     <div class="flex-1">
-      <div class="font-crimson text-sm text-amber-300">{{ message }}</div>
-      <div class="font-crimson text-xs text-white">
+      <div class="font-crimson text-md text-amber-300">{{ message }}</div>
+      <div class="font-crimson text-sm text-white">
         Reward: +{{ reward }} gold, Expires in: {{ expiresIn }} turn{{
           expiresIn > 1 ? 's' : ''
         }}, Probability:
