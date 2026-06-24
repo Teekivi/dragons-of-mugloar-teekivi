@@ -23,21 +23,22 @@ export const processMessage = (message: Message): Message => {
     return message;
   }
 
-  if (message.encrypted === EncryptionType.BASE64) {
-    return {
-      ...message,
-      adId: decodeBase64Utf8(message.adId),
-      message: decodeBase64Utf8(message.message),
-      probability: decodeBase64Utf8(message.probability),
-    };
-  }
+  const encryptionToDecryptFunc: Record<
+    EncryptionType,
+    (str: string) => string
+  > = {
+    [EncryptionType.BASE64]: decodeBase64Utf8,
+    [EncryptionType.ROT13]: rot13,
+  };
 
-  if (message.encrypted === EncryptionType.ROT13) {
+  const decrypt = encryptionToDecryptFunc[message.encrypted as EncryptionType];
+
+  if (decrypt) {
     return {
       ...message,
-      adId: rot13(message.adId),
-      message: rot13(message.message),
-      probability: rot13(message.probability),
+      adId: decrypt(message.adId),
+      message: decrypt(message.message),
+      probability: decrypt(message.probability),
     };
   }
 
