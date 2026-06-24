@@ -13,11 +13,19 @@ export const useMugloar = () => {
       try {
         return await fn(...args);
       } catch (error: any) {
+        const statusCode = error.data?.statusCode;
+        if (statusCode === 404) {
+          toastsStore.addToastWithMessage(
+            'Looks like the game might have expired. Please start a new game.',
+          );
+          throw error;
+        }
         const statusMessage = error.data?.data?.status;
         if (statusMessage !== 'Game Over') {
           toastsStore.addToastWithMessage(
             'Something went wrong. Please try again later.',
           );
+          throw error;
         }
         throw error;
       } finally {
