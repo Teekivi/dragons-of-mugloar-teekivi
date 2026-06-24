@@ -19,6 +19,7 @@ export interface Message {
   message: string; // Free text description of the message
   reward: number; // Reward in gold which is granted for successfully solving the game.
   expiresIn: number; // The amount in turns in which the message will become unavailable for solving.
+  encrypted: number | null; // 1 if "encrypted" in base64
   probability: string; // Chance of success, otherwise the player loses one life (undocumented)
 }
 

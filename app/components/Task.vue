@@ -4,7 +4,7 @@ defineProps<{
   message: string;
   reward: number;
   expiresIn: number;
-  // encrypted?
+  encrypted: number | null;
   probability: string;
 }>();
 
@@ -20,6 +20,9 @@ const { solveMessage, isLoading } = useMugloar();
           expiresIn > 1 ? 's' : ''
         }}, Probability:
         {{ probability }}
+        <span v-if="encrypted" class="text-amber-500">
+          (encrypted: {{ encrypted }})
+        </span>
       </div>
     </div>
     <Button :disabled="isLoading" @click="solveMessage(adId)">Solve</Button>

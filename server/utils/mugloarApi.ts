@@ -17,13 +17,13 @@ export const investigateReputation = async (gameId: string) => {
 
 export const getMessages = async (gameId: string) => {
   const { mugloarBaseUrl } = useRuntimeConfig();
-  const response = await $fetch<Message[]>(
+  const messages = await $fetch<Message[]>(
     `${mugloarBaseUrl}/${gameId}/messages`,
     {
       method: 'GET',
     },
   );
-  return response;
+  return messages.map(processMessage);
 };
 
 export const solveMessage = async (gameId: string, adId: string) => {
@@ -38,13 +38,9 @@ export const solveMessage = async (gameId: string, adId: string) => {
 
 export const getShopItems = async (gameId: string) => {
   const { mugloarBaseUrl } = useRuntimeConfig();
-  const response = await $fetch<ShopItem[]>(
-    `${mugloarBaseUrl}/${gameId}/shop`,
-    {
-      method: 'GET',
-    },
-  );
-  return response;
+  return $fetch<ShopItem[]>(`${mugloarBaseUrl}/${gameId}/shop`, {
+    method: 'GET',
+  });
 };
 
 export const buyShopItem = async (gameId: string, itemId: string) => {
