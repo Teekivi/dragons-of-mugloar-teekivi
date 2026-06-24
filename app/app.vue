@@ -6,7 +6,14 @@ useHead({
   },
 });
 
-const { startGame, isLoading } = useMugloar();
+const { startGame, isLoading, isGameOver } = useMugloar();
+
+const isGameOverOverlayOpen = ref(false);
+watch(isGameOver, (newValue) => {
+  if (newValue) {
+    isGameOverOverlayOpen.value = true;
+  }
+});
 </script>
 
 <template>
@@ -17,5 +24,9 @@ const { startGame, isLoading } = useMugloar();
     <Button :disabled="isLoading" @click="startGame">New Game</Button>
     <StateDisplay />
     <TasksAndShopTabs />
+    <GameOverOverlay
+      :isOpen="isGameOverOverlayOpen"
+      @close="isGameOverOverlayOpen = false"
+    />
   </div>
 </template>
