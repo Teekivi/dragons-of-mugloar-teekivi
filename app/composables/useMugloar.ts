@@ -75,7 +75,7 @@ export const useMugloar = () => {
       },
     );
     store.$patch(response);
-    await fetchShopItems();
+    await Promise.all([fetchMessages(), fetchShopItems()]);
   });
 
   return {
