@@ -20,7 +20,7 @@ watch(isGameOver, (newValue) => {
 
 <template>
   <div
-    class="mx-auto my-8 flex max-w-[800px] flex-col items-start gap-4 rounded-xl bg-amber-900 p-4"
+    class="mx-auto my-8 flex max-w-[1500px] flex-col items-start gap-4 rounded-xl bg-amber-900 p-4"
   >
     <h1 class="font-cinzel text-xl text-amber-300">Dragons of Mugloar</h1>
     <div class="flex items-center gap-2">
@@ -31,7 +31,7 @@ watch(isGameOver, (newValue) => {
     </div>
 
     <StateDisplay />
-    <TasksAndShopTabs />
+    <TasksAndShop />
 
     <GameOverOverlay
       :isOpen="isGameOverOverlayOpen"
