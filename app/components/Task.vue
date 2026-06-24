@@ -9,6 +9,20 @@ defineProps<{
 }>();
 
 const { solveMessage, isLoading } = useMugloar();
+
+const getEncryptionLabel = (
+  encrypted: EncryptionType | number | null,
+): string => {
+  if (!encrypted) {
+    return '';
+  }
+  const encryptedToLabel: Record<EncryptionType, string> = {
+    [EncryptionType.ROT13]: 'ROT13',
+    [EncryptionType.BASE64]: 'Base64',
+  };
+  const label = encryptedToLabel[encrypted as EncryptionType];
+  return `${label ?? 'Unsupported'} (${encrypted})`;
+};
 </script>
 
 <template>
@@ -21,7 +35,7 @@ const { solveMessage, isLoading } = useMugloar();
         }}, Probability:
         {{ probability }}
         <span v-if="encrypted" class="text-amber-500">
-          (encrypted: {{ encrypted }})
+          (encrypted: {{ getEncryptionLabel(encrypted) }})
         </span>
       </div>
     </div>
