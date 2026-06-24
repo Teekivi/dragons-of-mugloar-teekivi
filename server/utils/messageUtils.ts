@@ -1,3 +1,6 @@
+const decodeBase64Utf8 = (encoded: string): string =>
+  Buffer.from(encoded, 'base64').toString('utf8');
+
 export const processMessage = (message: Message): Message => {
   if (!message.encrypted) {
     return message;
@@ -6,9 +9,9 @@ export const processMessage = (message: Message): Message => {
   if (message.encrypted === 1) {
     return {
       ...message,
-      adId: atob(message.adId),
-      message: atob(message.message),
-      probability: atob(message.probability),
+      adId: decodeBase64Utf8(message.adId),
+      message: decodeBase64Utf8(message.message),
+      probability: decodeBase64Utf8(message.probability),
     };
   }
 
