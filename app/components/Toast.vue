@@ -12,7 +12,7 @@ onUnmounted(() => clearTimeout(timer));
 
 <template>
   <div
-    class="font-crimson flex w-[400px] items-center justify-between gap-4 rounded-xl bg-amber-500 p-4 text-black"
+    class="font-crimson flex w-screen max-w-[400px] items-center justify-between gap-4 rounded-xl bg-amber-500 p-4 text-black"
   >
     <div>{{ message }}</div>
     <Button small @click="toastsStore.removeToastById(id)">
