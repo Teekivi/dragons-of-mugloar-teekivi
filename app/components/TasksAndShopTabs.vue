@@ -2,7 +2,7 @@
 const activeTab = ref<'tasks' | 'shop'>('tasks');
 
 const store = useMugloarStore();
-const { fetchMessages, fetchShopItems, isGameStarted, isLoading } =
+const { fetchMessages, fetchShopItems, isGameStarted, isGameOver, isLoading } =
   useMugloar();
 
 const refresh = () => {
@@ -20,12 +20,14 @@ const refresh = () => {
       <Tab :active="activeTab === 'tasks'" @click="activeTab = 'tasks'">
         Tasks
       </Tab>
-      <Tab :active="activeTab === 'shop'" @click="activeTab = 'shop'">
-        Shop
-      </Tab>
+      <Tab :active="activeTab === 'shop'" @click="activeTab = 'shop'">Shop</Tab>
       <div class="flex-1" />
       <div class="my-1 ml-1 mr-2">
-        <Button small :disabled="!isGameStarted || isLoading" @click="refresh">
+        <Button
+          small
+          :disabled="!isGameStarted || isLoading || isGameOver"
+          @click="refresh"
+        >
           Refresh
         </Button>
       </div>

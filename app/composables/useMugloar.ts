@@ -78,6 +78,8 @@ export const useMugloar = () => {
     await Promise.all([fetchMessages(), fetchShopItems()]);
   });
 
+  const isGameStarted = computed(() => !!store.gameId);
+
   return {
     investigateReputation,
     fetchMessages,
@@ -85,7 +87,8 @@ export const useMugloar = () => {
     startGame,
     solveMessage,
     buyShopItem,
-    isGameStarted: computed(() => !!store.gameId),
+    isGameStarted,
+    isGameOver: computed(() => isGameStarted.value && store.lives <= 0),
     isLoading,
   };
 };

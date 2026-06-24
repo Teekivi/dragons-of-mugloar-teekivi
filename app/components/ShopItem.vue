@@ -5,7 +5,7 @@ defineProps<{
   cost: number;
 }>();
 
-const { buyShopItem, isLoading } = useMugloar();
+const { buyShopItem, isGameOver, isLoading } = useMugloar();
 </script>
 
 <template>
@@ -14,6 +14,8 @@ const { buyShopItem, isLoading } = useMugloar();
       <div class="text-sm text-amber-300">{{ name }}</div>
       <div class="text-xs text-white">Cost: {{ cost }} gold</div>
     </div>
-    <Button :disabled="isLoading" @click="buyShopItem(id)">Buy</Button>
+    <Button :disabled="isLoading || isGameOver" @click="buyShopItem(id)">
+      Buy
+    </Button>
   </div>
 </template>

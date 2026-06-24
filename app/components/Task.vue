@@ -8,7 +8,7 @@ defineProps<{
   probability: string;
 }>();
 
-const { solveMessage, isLoading } = useMugloar();
+const { solveMessage, isLoading, isGameOver } = useMugloar();
 
 const getEncryptionLabel = (
   encrypted: EncryptionType | number | null,
@@ -39,6 +39,8 @@ const getEncryptionLabel = (
         </span>
       </div>
     </div>
-    <Button :disabled="isLoading" @click="solveMessage(adId)">Solve</Button>
+    <Button :disabled="isLoading || isGameOver" @click="solveMessage(adId)">
+      Solve
+    </Button>
   </div>
 </template>
