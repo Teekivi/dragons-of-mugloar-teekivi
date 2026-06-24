@@ -67,4 +67,29 @@ describe('processMessage', () => {
     const result = processMessage({ ...message });
     expect(result).toEqual(expected);
   });
+
+  it('should decode ROT13 encoded message if encrypted is 2', () => {
+    const message: Message = {
+      adId: 'ZrmDI2Iw',
+      message:
+        'Xvyy Fvzva Jvafgba jvgu cna naq znxr Nanu Punzoref sebz zbhagnvaf va Erqubyr gb gnxr gur oynzr',
+      reward: 113,
+      expiresIn: 1,
+      encrypted: 2,
+      probability: 'Fhvpvqr zvffvba',
+    };
+
+    const expected: Message = {
+      adId: 'MezQV2Vj',
+      message:
+        'Kill Simin Winston with pan and make Anah Chambers from mountains in Redhole to take the blame',
+      reward: 113,
+      expiresIn: 1,
+      encrypted: 2,
+      probability: 'Suicide mission',
+    };
+
+    const result = processMessage({ ...message });
+    expect(result).toEqual(expected);
+  });
 });

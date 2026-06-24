@@ -14,12 +14,17 @@ export interface ReputationResponse {
   underworld: number; // Your reputation with underworld
 }
 
+export enum EncryptionType {
+  BASE64 = 1,
+  ROT13 = 2,
+}
+
 export interface Message {
   adId: string; // The unique ID of the message
   message: string; // Free text description of the message
   reward: number; // Reward in gold which is granted for successfully solving the game.
   expiresIn: number; // The amount in turns in which the message will become unavailable for solving.
-  encrypted: number | null; // 1 if "encrypted" in base64
+  encrypted: EncryptionType | number | null; // Encryption of adId, message and probability (number fallback = unsupported encryption type)
   probability: string; // Chance of success, otherwise the player loses one life (undocumented)
 }
 
