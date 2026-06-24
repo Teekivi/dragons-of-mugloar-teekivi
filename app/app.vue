@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ToastsOverlay from './components/ToastsOverlay.vue';
+
 useHead({
   title: 'Dragons of Mugloar',
   bodyAttrs: {
@@ -27,11 +29,14 @@ watch(isGameOver, (newValue) => {
         Game Over. Start a new one?
       </div>
     </div>
+
     <StateDisplay />
     <TasksAndShopTabs />
+
     <GameOverOverlay
       :isOpen="isGameOverOverlayOpen"
       @close="isGameOverOverlayOpen = false"
     />
+    <ToastsOverlay />
   </div>
 </template>

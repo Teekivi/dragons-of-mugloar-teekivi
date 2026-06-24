@@ -1,14 +1,22 @@
 export const useMugloar = () => {
-  const store = useMugloarStore();
+  const mugloarStore = useMugloarStore();
+  const toastsStore = useToastsStore();
   const isLoading = ref(false);
 
-  const withLoading =
+  const withHandling =
     <TArgs extends unknown[]>(fn: (...args: TArgs) => Promise<void>) =>
     async (...args: TArgs) => {
       const wasAlreadyLoading = isLoading.value;
       isLoading.value = true;
       try {
         await fn(...args);
+      } catch (error: any) {
+        const statusMessage = error.data?.data?.status;
+        if (statusMessage !== 'Game Over') {
+          toastsStore.addToastWithMessage(
+            'Something went wrong. Please try again later.',
+          );
+        }
       } finally {
         if (!wasAlreadyLoading) {
           // Avoid issues on nested calls
@@ -17,68 +25,77 @@ export const useMugloar = () => {
       }
     };
 
-  const investigateReputation = withLoading(async () => {
+  const investigateReputation = withHandling(async () => {
     const response = await $fetch<ReputationResponse>(
-      `/api/${store.gameId}/investigate/reputation`,
+      `/api/${mugloarStore.gameId}/investigate/reputation`,
       {
         method: 'POST',
       },
     );
-    store.peopleReputation = response.people;
-    store.stateReputation = response.state;
-    store.underworldReputation = response.underworld;
+    mugloarStore.peopleReputation = response.people;
+    mugloarStore.stateReputation = response.state;
+    mugloarStore.underworldReputation = response.underworld;
   });
 
-  const fetchMessages = withLoading(async () => {
-    const response = await $fetch<Message[]>(`/api/${store.gameId}/messages`, {
-      method: 'GET',
-    });
-    store.messages = response;
+  const fetchMessages = withHandling(async () => {
+    const response = await $fetch<Message[]>(
+      `/api/${mugloarStore.gameId}/messages`,
+      {
+        method: 'GET',
+      },
+    );
+    mugloarStore.messages = response;
   });
 
-  const fetchShopItems = withLoading(async () => {
-    const response = await $fetch<ShopItem[]>(`/api/${store.gameId}/shop`, {
-      method: 'GET',
-    });
-    store.shopItems = response;
+  const fetchShopItems = withHandling(async () => {
+    const response = await $fetch<ShopItem[]>(
+      `/api/${mugloarStore.gameId}/shop`,
+      {
+        method: 'GET',
+      },
+    );
+    mugloarStore.shopItems = response;
   });
 
-  const startGame = withLoading(async () => {
+  const startGame = withHandling(async () => {
     const data = await $fetch<StartGameResponse>('/api/game/start', {
       method: 'POST',
     });
-    store.$patch(data);
+    mugloarStore.$patch(data);
     await Promise.all([fetchMessages(), fetchShopItems()]);
     // The reputations are zero at the start of the game
     // so we don't need to use up a turn to investigate it
-    store.peopleReputation = 0;
-    store.stateReputation = 0;
-    store.underworldReputation = 0;
+    mugloarStore.peopleReputation = 0;
+    mugloarStore.stateReputation = 0;
+    mugloarStore.underworldReputation = 0;
   });
 
-  const solveMessage = withLoading(async (adId: string) => {
+  const solveMessage = withHandling(async (adId: string) => {
     const response = await $fetch<MessageSolveResponse>(
-      `/api/${store.gameId}/solve/${adId}`,
+      `/api/${mugloarStore.gameId}/solve/${adId}`,
       {
         method: 'POST',
       },
     );
-    store.$patch(response);
+    mugloarStore.$patch(response);
     await fetchMessages();
   });
 
-  const buyShopItem = withLoading(async (itemId: string) => {
+  const buyShopItem = withHandling(async (itemId: string) => {
     const response = await $fetch<ShopItemBuyResponse>(
-      `/api/${store.gameId}/shop/buy/${itemId}`,
+      `/api/${mugloarStore.gameId}/shop/buy/${itemId}`,
       {
         method: 'POST',
       },
     );
-    store.$patch(response);
+    mugloarStore.$patch(response);
     await Promise.all([fetchMessages(), fetchShopItems()]);
   });
 
-  const isGameStarted = computed(() => !!store.gameId);
+  const isGameStarted = computed(() => !!mugloarStore.gameId);
+  const isGameOver = computed(
+    () => isGameStarted.value && mugloarStore.lives <= 0,
+  );
 
   return {
     investigateReputation,
@@ -88,7 +105,7 @@ export const useMugloar = () => {
     solveMessage,
     buyShopItem,
     isGameStarted,
-    isGameOver: computed(() => isGameStarted.value && store.lives <= 0),
+    isGameOver,
     isLoading,
   };
 };
