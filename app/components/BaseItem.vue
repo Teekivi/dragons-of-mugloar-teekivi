@@ -12,7 +12,7 @@ defineEmits<{
 </script>
 
 <template>
-  <div class="flex p-2 odd:bg-amber-900">
+  <div class="flex gap-2 p-2 odd:bg-amber-900">
     <div class="flex-1">
       <div class="font-crimson text-md text-amber-300">{{ label }}</div>
       <div class="font-crimson text-sm text-white">{{ sublabel }}</div>
