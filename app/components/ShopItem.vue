@@ -1,11 +1,22 @@
 <script setup lang="ts">
-defineProps<{
+const { id, name, cost } = defineProps<{
   id: string;
   name: string;
   cost: number;
 }>();
 
+const toastsStore = useToastsStore();
+
 const { buyShopItem, isGameOver, isLoading } = useMugloar();
+
+const handleBuyShopItem = async () => {
+  const response = await buyShopItem(id);
+  if (response?.shoppingSuccess) {
+    toastsStore.addToastWithMessage(`Bought ${name} for ${cost} gold`);
+  } else {
+    toastsStore.addToastWithMessage(`Failed to buy ${name} for ${cost} gold`);
+  }
+};
 </script>
 
 <template>
@@ -14,6 +25,6 @@ const { buyShopItem, isGameOver, isLoading } = useMugloar();
     :sublabel="`Cost: ${cost} gold`"
     :buttonLabel="'Buy'"
     :buttonDisabled="isLoading || isGameOver"
-    @buttonClick="buyShopItem(id)"
+    @buttonClick="handleBuyShopItem"
   />
 </template>

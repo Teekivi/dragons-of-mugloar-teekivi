@@ -4,12 +4,14 @@ export const useMugloar = () => {
   const isLoading = ref(false);
 
   const withHandling =
-    <TArgs extends unknown[]>(fn: (...args: TArgs) => Promise<void>) =>
+    <TArgs extends unknown[], TResult>(
+      fn: (...args: TArgs) => Promise<TResult>,
+    ) =>
     async (...args: TArgs) => {
       const wasAlreadyLoading = isLoading.value;
       isLoading.value = true;
       try {
-        await fn(...args);
+        return await fn(...args);
       } catch (error: any) {
         const statusMessage = error.data?.data?.status;
         if (statusMessage !== 'Game Over') {
@@ -17,6 +19,7 @@ export const useMugloar = () => {
             'Something went wrong. Please try again later.',
           );
         }
+        throw error;
       } finally {
         if (!wasAlreadyLoading) {
           // Avoid issues on nested calls
@@ -90,6 +93,7 @@ export const useMugloar = () => {
     );
     mugloarStore.$patch(response);
     await Promise.all([fetchMessages(), fetchShopItems()]);
+    return response;
   });
 
   const isGameStarted = computed(() => !!mugloarStore.gameId);
