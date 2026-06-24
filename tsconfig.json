@@ -13,7 +13,10 @@
     },
     {
       "path": "./.nuxt/tsconfig.node.json"
+    },
+    {
+      "path": "./test/tsconfig.json"
     }
   ],
-  "types": ["node"]
+  "types": ["node", "vitest/globals"]
 }

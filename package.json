@@ -18,8 +18,11 @@
     "vue-router": "^5.1.0"
   },
   "devDependencies": {
+    "@nuxt/test-utils": "^4.0.3",
     "@types/node": "^26.0.0",
     "prettier": "^3.8.4",
-    "prettier-plugin-tailwindcss": "^0.8.0"
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.9"
   }
 }
