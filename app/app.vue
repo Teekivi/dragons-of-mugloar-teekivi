@@ -13,7 +13,7 @@ const { startGame, isLoading } = useMugloar();
   <div
     class="mx-auto my-8 flex max-w-[800px] flex-col items-start gap-4 rounded-xl bg-amber-900 p-4"
   >
-    <h1 class="text-xl text-amber-300">Dragons of Mugloar</h1>
+    <h1 class="font-cinzel text-xl text-amber-300">Dragons of Mugloar</h1>
     <Button :disabled="isLoading" @click="startGame">New Game</Button>
     <StateDisplay />
     <TasksAndShopTabs />
