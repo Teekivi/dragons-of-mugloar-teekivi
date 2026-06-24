@@ -1,7 +1,8 @@
 <script setup lang="ts">
 const store = useMugloarStore();
 
-const { investigateReputation, isGameStarted, isLoading } = useMugloar();
+const { investigateReputation, isGameStarted, isLoading, isGameOver } =
+  useMugloar();
 
 const valueIfGameStarted = <T,>(value: T) =>
   isGameStarted.value ? value : null;
@@ -30,7 +31,7 @@ const valueIfGameStarted = <T,>(value: T) =>
         Reputation:
         <Button
           small
-          :disabled="!isGameStarted || isLoading"
+          :disabled="!isGameStarted || isLoading || isGameOver"
           @click="investigateReputation"
         >
           Investigate
