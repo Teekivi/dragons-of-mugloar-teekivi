@@ -17,7 +17,7 @@ export const useMugloar = () => {
       }
     };
 
-  const fetchReputation = withLoading(async () => {
+  const investigateReputation = withLoading(async () => {
     const response = await $fetch<ReputationResponse>(
       `/api/${store.gameId}/investigate/reputation`,
       {
@@ -48,7 +48,12 @@ export const useMugloar = () => {
       method: 'POST',
     });
     store.$patch(data);
-    await Promise.all([fetchReputation(), fetchMessages(), fetchShopItems()]);
+    await Promise.all([fetchMessages(), fetchShopItems()]);
+    // The reputations are zero at the start of the game
+    // so we don't need to use up a turn to investigate it
+    store.peopleReputation = 0;
+    store.stateReputation = 0;
+    store.underworldReputation = 0;
   });
 
   const solveMessage = withLoading(async (adId: string) => {
@@ -59,7 +64,7 @@ export const useMugloar = () => {
       },
     );
     store.$patch(response);
-    await Promise.all([fetchMessages(), fetchReputation()]);
+    await fetchMessages();
   });
 
   const buyShopItem = withLoading(async (itemId: string) => {
@@ -70,11 +75,11 @@ export const useMugloar = () => {
       },
     );
     store.$patch(response);
-    await Promise.all([fetchShopItems(), fetchReputation()]);
+    await fetchShopItems();
   });
 
   return {
-    fetchReputation,
+    investigateReputation,
     fetchMessages,
     fetchShopItems,
     startGame,

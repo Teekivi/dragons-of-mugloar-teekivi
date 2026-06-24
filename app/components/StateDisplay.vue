@@ -3,7 +3,7 @@ const store = useMugloarStore();
 
 const valueIfGameStarted = <T,>(value: T) => (store.gameId ? value : null);
 
-const { fetchReputation, isLoading } = useMugloar();
+const { investigateReputation, isLoading } = useMugloar();
 </script>
 
 <template>
@@ -25,7 +25,7 @@ const { fetchReputation, isLoading } = useMugloar();
     <div>
       <h2 class="mb-2 flex items-center gap-2 text-lg text-amber-300">
         Reputation:
-        <Button small :disabled="isLoading" @click="fetchReputation"
+        <Button small :disabled="isLoading" @click="investigateReputation"
           >Investigate</Button
         >
       </h2>
