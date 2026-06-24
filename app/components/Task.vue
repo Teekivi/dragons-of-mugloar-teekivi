@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{
+const { reward, expiresIn, probability, encrypted } = defineProps<{
   adId: string;
   message: string;
   reward: number;
@@ -23,24 +23,25 @@ const getEncryptionLabel = (
   const label = encryptedToLabel[encrypted as EncryptionType];
   return `${label ?? 'Unsupported'} (${encrypted})`;
 };
+
+const sublabel = computed(() =>
+  [
+    `Reward: +${reward} gold`,
+    `Expires in: ${expiresIn} turn${expiresIn > 1 ? 's' : ''}`,
+    `Probability: ${probability}`,
+    encrypted ? `Encrypted: ${getEncryptionLabel(encrypted)}` : '',
+  ]
+    .filter(Boolean)
+    .join(', '),
+);
 </script>
 
 <template>
-  <div class="flex p-2 odd:bg-amber-900">
-    <div class="flex-1">
-      <div class="font-crimson text-md text-amber-300">{{ message }}</div>
-      <div class="font-crimson text-sm text-white">
-        Reward: +{{ reward }} gold, Expires in: {{ expiresIn }} turn{{
-          expiresIn > 1 ? 's' : ''
-        }}, Probability:
-        {{ probability }}
-        <span v-if="encrypted" class="text-amber-500">
-          (encrypted: {{ getEncryptionLabel(encrypted) }})
-        </span>
-      </div>
-    </div>
-    <Button :disabled="isLoading || isGameOver" @click="solveMessage(adId)">
-      Solve
-    </Button>
-  </div>
+  <BaseItem
+    :label="message"
+    :sublabel="sublabel"
+    :buttonLabel="'Solve'"
+    :buttonDisabled="isLoading || isGameOver"
+    @buttonClick="solveMessage(adId)"
+  />
 </template>

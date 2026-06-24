@@ -9,13 +9,11 @@ const { buyShopItem, isGameOver, isLoading } = useMugloar();
 </script>
 
 <template>
-  <div class="flex p-2 odd:bg-amber-900">
-    <div class="flex-1">
-      <div class="font-crimson text-md text-amber-300">{{ name }}</div>
-      <div class="font-crimson text-sm text-white">Cost: {{ cost }} gold</div>
-    </div>
-    <Button :disabled="isLoading || isGameOver" @click="buyShopItem(id)">
-      Buy
-    </Button>
-  </div>
+  <BaseItem
+    :label="name"
+    :sublabel="`Cost: ${cost} gold`"
+    :buttonLabel="'Buy'"
+    :buttonDisabled="isLoading || isGameOver"
+    @buttonClick="buyShopItem(id)"
+  />
 </template>
