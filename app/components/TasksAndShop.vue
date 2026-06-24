@@ -16,6 +16,26 @@ const refreshBasedOnActiveTab = () => {
     fetchShopItems();
   }
 };
+
+const noTasksMessage = computed(() => {
+  if (store.messages.length) {
+    return null;
+  }
+  if (!isGameStarted.value) {
+    return 'Start a game to see tasks';
+  }
+  return 'No tasks available';
+});
+
+const noShopItemsMessage = computed(() => {
+  if (store.shopItems.length) {
+    return null;
+  }
+  if (!isGameStarted.value) {
+    return 'Start a game to see shop items';
+  }
+  return 'No shop items available';
+});
 </script>
 
 <template>
@@ -43,66 +63,30 @@ const refreshBasedOnActiveTab = () => {
     </div>
 
     <div class="flex gap-4 self-stretch">
-      <div :class="['flex-[2] lg:block', { hidden: activeTab !== 'tasks' }]">
-        <div class="mb-2 hidden items-center justify-between lg:flex">
-          <div class="font-cinzel text-lg text-amber-300">Tasks:</div>
-          <div class="my-1 ml-1 mr-2">
-            <Button
-              small
-              :disabled="!isGameStarted || isLoadingMessages || isGameOver"
-              @click="fetchMessages"
-            >
-              Refresh
-            </Button>
-          </div>
-        </div>
-        <div class="rounded-b-lg bg-amber-800 p-2">
-          <Task
-            v-if="store.messages.length > 0"
-            v-for="task in store.messages"
-            :key="task.adId"
-            v-bind="task"
-          />
-          <div v-else class="p-4 text-center text-amber-300">
-            {{
-              isGameStarted ? 'No tasks available' : 'Start a game to see tasks'
-            }}
-          </div>
-        </div>
-      </div>
-
-      <div :class="['flex-1 lg:block', { hidden: activeTab !== 'shop' }]">
-        <div class="mb-2 hidden items-center justify-between lg:flex">
-          <div class="font-cinzel text-lg text-amber-300">Shop:</div>
-          <div class="my-1 ml-1 mr-2">
-            <Button
-              small
-              :disabled="!isGameStarted || isLoadingShopItems || isGameOver"
-              @click="fetchShopItems"
-            >
-              Refresh
-            </Button>
-          </div>
-        </div>
-        <div class="rounded-b-lg bg-amber-800 p-2">
-          <ShopItem
-            v-if="store.shopItems.length > 0"
-            v-for="item in store.shopItems"
-            :key="item.id"
-            v-bind="item"
-          />
-          <div
-            v-if="store.shopItems.length === 0"
-            class="p-4 text-center text-amber-300"
-          >
-            {{
-              isGameStarted
-                ? 'No shop items available'
-                : 'Start a game to see shop items'
-            }}
-          </div>
-        </div>
-      </div>
+      <GameSection
+        class="flex-[2]"
+        title="Tasks"
+        :isActiveTab="activeTab === 'tasks'"
+        :isLoading="isLoadingMessages"
+        :noItemsMessage="noTasksMessage"
+        @refresh="fetchMessages"
+      >
+        <Task v-for="task in store.messages" :key="task.adId" v-bind="task" />
+      </GameSection>
+      <GameSection
+        class="flex-1"
+        title="Shop"
+        :isActiveTab="activeTab === 'shop'"
+        :isLoading="isLoadingShopItems"
+        :noItemsMessage="noShopItemsMessage"
+        @refresh="fetchShopItems"
+      >
+        <ShopItem
+          v-for="item in store.shopItems"
+          :key="item.id"
+          v-bind="item"
+        />
+      </GameSection>
     </div>
   </div>
 </template>
