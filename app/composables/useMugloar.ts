@@ -85,6 +85,7 @@ export const useMugloar = () => {
     startGame,
     solveMessage,
     buyShopItem,
+    isGameStarted: computed(() => !!store.gameId),
     isLoading,
   };
 };

@@ -2,7 +2,8 @@
 const activeTab = ref<'tasks' | 'shop'>('tasks');
 
 const store = useMugloarStore();
-const { fetchMessages, fetchShopItems, isLoading } = useMugloar();
+const { fetchMessages, fetchShopItems, isGameStarted, isLoading } =
+  useMugloar();
 
 const refresh = () => {
   if (activeTab.value === 'tasks') {
@@ -24,7 +25,9 @@ const refresh = () => {
       </Tab>
       <div class="flex-1" />
       <div class="my-1 ml-1 mr-2">
-        <Button small :disabled="isLoading" @click="refresh">Refresh</Button>
+        <Button small :disabled="!isGameStarted || isLoading" @click="refresh">
+          Refresh
+        </Button>
       </div>
     </div>
     <div class="rounded-b-lg bg-amber-800 p-2">
@@ -35,11 +38,10 @@ const refresh = () => {
           :key="task.adId"
           v-bind="task"
         />
-        <div
-          v-if="store.messages.length === 0"
-          class="p-4 text-center text-amber-300"
-        >
-          No tasks available
+        <div v-else class="p-4 text-center text-amber-300">
+          {{
+            isGameStarted ? 'No tasks available' : 'Start a game to see tasks'
+          }}
         </div>
       </template>
       <template v-else>
@@ -53,7 +55,11 @@ const refresh = () => {
           v-if="store.shopItems.length === 0"
           class="p-4 text-center text-amber-300"
         >
-          No shop items available
+          {{
+            isGameStarted
+              ? 'No shop items available'
+              : 'Start a game to see shop items'
+          }}
         </div>
       </template>
     </div>
