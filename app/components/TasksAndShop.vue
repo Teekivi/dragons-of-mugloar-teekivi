@@ -73,10 +73,12 @@ const noShopItemsMessage = computed(() => {
       >
         <TransitionGroup
           tag="div"
+          class="relative"
           enter-active-class="transition-all duration-300 ease-in opacity-0 -translate-x-5"
           enter-to-class="opacity-100 translate-x-0"
-          leave-active-class="transition-all duration-300 ease-in"
+          leave-active-class="transition-all duration-300 ease-in absolute w-full"
           leave-to-class="opacity-0 -translate-x-5"
+          move-class="transition-all duration-300"
         >
           <Task v-for="task in store.messages" :key="task.adId" v-bind="task" />
         </TransitionGroup>
