@@ -131,13 +131,10 @@ const pickMessageToSolve = (messages: Message[]): Message | null => {
   return messages.reduce((currentBest, message) => {
     const currentBestRank = getProbabilityRank(currentBest.probability);
     const messageRank = getProbabilityRank(message.probability);
-    if (messageRank < currentBestRank) {
-      return message;
-    }
-    if (messageRank > currentBestRank) {
-      return currentBest;
-    }
-    if (message.reward > currentBest.reward) {
+    if (
+      messageRank < currentBestRank ||
+      (messageRank === currentBestRank && message.reward > currentBest.reward)
+    ) {
       return message;
     }
     return currentBest;
