@@ -54,6 +54,18 @@ const executeAutoplay = async (
   );
 
   while (activeGameIds.has(gameId) && state.lives > 0) {
+    if (state.lives < 3) {
+      const shopItems = await getShopItems(gameId);
+      const healingPotion = shopItems.find(
+        (item) => item.id === ShopItemId.HEALING_POTION,
+      );
+      if (healingPotion && state.gold >= healingPotion.cost) {
+        const buyResponse = await buyShopItem(gameId, healingPotion.id);
+        peer.send(JSON.stringify({ type: 'stateUpdate', data: buyResponse }));
+        Object.assign(state, buyResponse);
+        await sleep(1000);
+      }
+    }
     const messages = await getMessages(gameId);
     peer.send(JSON.stringify({ type: 'stateUpdate', data: { messages } }));
     const message = pickMessageToSolve(messages);
@@ -64,7 +76,7 @@ const executeAutoplay = async (
     const solveResponse = await solveMessage(gameId, message.adId);
     peer.send(JSON.stringify({ type: 'stateUpdate', data: solveResponse }));
     Object.assign(state, solveResponse);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await sleep(1000);
   }
 
   if (peer) {

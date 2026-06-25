@@ -14,11 +14,6 @@ export interface ReputationResponse {
   underworld: number; // Your reputation with underworld
 }
 
-export enum EncryptionType {
-  BASE64 = 1,
-  ROT13 = 2,
-}
-
 export interface Message {
   adId: string; // The unique ID of the message
   message: string; // Free text description of the message
@@ -39,7 +34,7 @@ export interface MessageSolveResponse {
 }
 
 export interface ShopItem {
-  id: string; // Item unique identifier
+  id: ShopItemId; // Item unique identifier
   name: string; // Item name
   cost: number; // Item cost in gold
 }

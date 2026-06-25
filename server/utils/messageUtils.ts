@@ -1,4 +1,4 @@
-import { EncryptionType } from '../../shared/types/mugloarApiTypes';
+import { EncryptionType } from '../../shared/types/mugloarApiEnums';
 
 const decodeBase64Utf8 = (encoded: string): string =>
   Buffer.from(encoded, 'base64').toString('utf8');
