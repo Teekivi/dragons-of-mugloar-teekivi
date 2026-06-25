@@ -1,8 +1,18 @@
+const handleUpstreamError = (error: unknown): never => {
+  if (error && typeof error === 'object' && 'response' in error) {
+    const status = (error as any).response?.status;
+    const statusMessage =
+      (error as any).response?.statusText ?? 'Upstream error';
+    throw createError({ statusCode: status, statusMessage });
+  }
+  throw error;
+};
+
 export const startGame = async () => {
   const { mugloarBaseUrl } = useRuntimeConfig();
   return $fetch<StartGameResponse>(`${mugloarBaseUrl}/game/start`, {
     method: 'POST',
-  });
+  }).catch(handleUpstreamError);
 };
 
 export const investigateReputation = async (gameId: string) => {
@@ -12,7 +22,7 @@ export const investigateReputation = async (gameId: string) => {
     {
       method: 'POST',
     },
-  );
+  ).catch(handleUpstreamError);
 };
 
 export const getMessages = async (gameId: string) => {
@@ -22,7 +32,7 @@ export const getMessages = async (gameId: string) => {
     {
       method: 'GET',
     },
-  );
+  ).catch(handleUpstreamError);
   return messages.map(processMessage);
 };
 
@@ -33,14 +43,14 @@ export const solveMessage = async (gameId: string, adId: string) => {
     {
       method: 'POST',
     },
-  );
+  ).catch(handleUpstreamError);
 };
 
 export const getShopItems = async (gameId: string) => {
   const { mugloarBaseUrl } = useRuntimeConfig();
   return $fetch<ShopItem[]>(`${mugloarBaseUrl}/${gameId}/shop`, {
     method: 'GET',
-  });
+  }).catch(handleUpstreamError);
 };
 
 export const buyShopItem = async (gameId: string, itemId: string) => {
@@ -50,5 +60,5 @@ export const buyShopItem = async (gameId: string, itemId: string) => {
     {
       method: 'POST',
     },
-  );
+  ).catch(handleUpstreamError);
 };

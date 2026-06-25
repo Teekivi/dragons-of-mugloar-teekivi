@@ -18,14 +18,11 @@ export const useMugloar = () => {
           toastsStore.addToastWithMessage(
             'Looks like the game might have expired. Please start a new game.',
           );
-          throw error;
-        }
-        const statusMessage = error.data?.data?.status;
-        if (statusMessage !== 'Game Over') {
+        } else if (statusCode !== 410) {
+          // HTTP 410 corresponds to game over in which case we don't want to show a toast
           toastsStore.addToastWithMessage(
             'Something went wrong. Please try again later.',
           );
-          throw error;
         }
         throw error;
       } finally {
