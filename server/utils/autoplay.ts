@@ -113,6 +113,7 @@ const probabilityOrder = [
   'Quite likely',
   'Hmmm....',
   'Gamble',
+  'Risky',
   'Rather detrimental',
   'Playing with fire',
   'Suicide mission',
