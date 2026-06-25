@@ -7,7 +7,7 @@ const { id, name, cost } = defineProps<{
 
 const toastsStore = useToastsStore();
 
-const { buyShopItem, isGameOver, isLoading } = useMugloar();
+const { buyShopItem, isGameManuallyPlayable, isLoading } = useMugloar();
 
 const handleBuyShopItem = async () => {
   const response = await buyShopItem(id);
@@ -24,7 +24,7 @@ const handleBuyShopItem = async () => {
     :label="name"
     :sublabel="`Cost: ${cost} gold`"
     :buttonLabel="'Buy'"
-    :buttonDisabled="isLoading || isGameOver"
+    :buttonDisabled="isLoading || !isGameManuallyPlayable"
     @buttonClick="handleBuyShopItem"
   />
 </template>

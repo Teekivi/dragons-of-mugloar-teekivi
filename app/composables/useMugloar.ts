@@ -77,6 +77,9 @@ export const useMugloar = () => {
   const isGameOver = computed(
     () => isGameStarted.value && mugloarStore.lives <= 0,
   );
+  const isGameManuallyPlayable = computed(
+    () => !isGameOver.value && !mugloarStore.isAutoplayActive,
+  );
 
   return {
     startGame,
@@ -87,6 +90,7 @@ export const useMugloar = () => {
     buyShopItem,
     isGameStarted,
     isGameOver,
+    isGameManuallyPlayable,
     isLoading,
   };
 };

@@ -1,8 +1,12 @@
 <script setup lang="ts">
 const store = useMugloarStore();
 
-const { investigateReputation, isGameStarted, isLoading, isGameOver } =
-  useMugloar();
+const {
+  investigateReputation,
+  isGameStarted,
+  isGameManuallyPlayable,
+  isLoading,
+} = useMugloar();
 
 const valueIfGameStarted = <T,>(value: T) =>
   isGameStarted.value ? value : null;
@@ -11,7 +15,7 @@ const valueIfGameStarted = <T,>(value: T) =>
 <template>
   <div class="flex flex-wrap gap-x-6 gap-y-4">
     <div>
-      <h2 class="font-cinzel mb-2 text-lg text-amber-300">Stats:</h2>
+      <h2 class="mb-2 font-cinzel text-lg text-amber-300">Stats:</h2>
       <div class="flex flex-wrap gap-2">
         <StateElement label="Lives" :value="valueIfGameStarted(store.lives)" />
         <StateElement label="Gold" :value="valueIfGameStarted(store.gold)" />
@@ -26,12 +30,12 @@ const valueIfGameStarted = <T,>(value: T) =>
     </div>
     <div>
       <h2
-        class="font-cinzel mb-2 flex items-center gap-2 text-lg text-amber-300"
+        class="mb-2 flex items-center gap-2 font-cinzel text-lg text-amber-300"
       >
         Reputation:
         <Button
           small
-          :disabled="!isGameStarted || isLoading || isGameOver"
+          :disabled="!isGameStarted || isLoading || !isGameManuallyPlayable"
           @click="investigateReputation"
         >
           Investigate

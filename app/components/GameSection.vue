@@ -10,7 +10,7 @@ defineEmits<{
   refresh: [];
 }>();
 
-const { isGameStarted, isGameOver } = useMugloar();
+const { isGameStarted, isGameManuallyPlayable } = useMugloar();
 </script>
 
 <template>
@@ -20,7 +20,7 @@ const { isGameStarted, isGameOver } = useMugloar();
       <div class="my-1 ml-1 mr-2">
         <Button
           small
-          :disabled="!isGameStarted || isLoading || isGameOver"
+          :disabled="!isGameStarted || isLoading || !isGameManuallyPlayable"
           @click="$emit('refresh')"
         >
           Refresh

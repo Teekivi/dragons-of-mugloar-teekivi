@@ -3,7 +3,7 @@ const activeTab = ref<'tasks' | 'shop'>('tasks');
 
 const store = useMugloarStore();
 
-const { isGameStarted, isGameOver } = useMugloar();
+const { isGameStarted, isGameManuallyPlayable } = useMugloar();
 
 // Use useMugloar multiple times for independent loading states
 const { fetchMessages, isLoading: isLoadingMessages } = useMugloar();
@@ -53,7 +53,7 @@ const noShopItemsMessage = computed(() => {
             !isGameStarted ||
             isLoadingMessages ||
             isLoadingShopItems ||
-            isGameOver
+            !isGameManuallyPlayable
           "
           @click="refreshBasedOnActiveTab"
         >

@@ -8,7 +8,7 @@ const { reward, expiresIn, probability, encrypted } = defineProps<{
   probability: string;
 }>();
 
-const { solveMessage, isLoading, isGameOver } = useMugloar();
+const { solveMessage, isLoading, isGameManuallyPlayable } = useMugloar();
 
 const getEncryptionLabel = (
   encrypted: EncryptionType | number | null,
@@ -41,7 +41,7 @@ const sublabel = computed(() =>
     :label="message"
     :sublabel="sublabel"
     :buttonLabel="'Solve'"
-    :buttonDisabled="isLoading || isGameOver"
+    :buttonDisabled="isLoading || !isGameManuallyPlayable"
     @buttonClick="solveMessage(adId)"
   />
 </template>
