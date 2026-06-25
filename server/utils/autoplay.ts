@@ -134,6 +134,9 @@ const pickMessageToSolve = (messages: Message[]): Message | null => {
     if (messageRank < currentBestRank) {
       return message;
     }
+    if (messageRank > currentBestRank) {
+      return currentBest;
+    }
     if (message.reward > currentBest.reward) {
       return message;
     }
