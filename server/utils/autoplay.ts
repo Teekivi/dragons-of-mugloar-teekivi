@@ -186,7 +186,6 @@ const probabilityOrder = [
 const getProbabilityRank = (probability: string): number => {
   const index = probabilityOrder.indexOf(probability);
   if (index === -1) {
-    // TODO: remove once we have more full probabilityOrder listing
     console.warn(`Unknown probability: ${probability}`);
   }
   return index !== -1 ? index : probabilityOrder.length;
