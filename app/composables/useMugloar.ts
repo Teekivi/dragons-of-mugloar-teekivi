@@ -36,6 +36,19 @@ export const useMugloar = () => {
       }
     };
 
+  const startGame = withHandling(async () => {
+    const data = await $fetch<StartGameResponse>('/api/game/start', {
+      method: 'POST',
+    });
+    mugloarStore.$patch(data);
+    await Promise.all([fetchMessages(), fetchShopItems()]);
+    // The reputations are zero at the start of the game
+    // so we don't need to use up a turn to investigate it
+    mugloarStore.peopleReputation = 0;
+    mugloarStore.stateReputation = 0;
+    mugloarStore.underworldReputation = 0;
+  });
+
   const investigateReputation = withHandling(async () => {
     const response = await $fetch<ReputationResponse>(
       `/api/${mugloarStore.gameId}/investigate/reputation`,
@@ -71,19 +84,6 @@ export const useMugloar = () => {
     mugloarStore.shopItems = response;
   });
 
-  const startGame = withHandling(async () => {
-    const data = await $fetch<StartGameResponse>('/api/game/start', {
-      method: 'POST',
-    });
-    mugloarStore.$patch(data);
-    await Promise.all([fetchMessages(), fetchShopItems()]);
-    // The reputations are zero at the start of the game
-    // so we don't need to use up a turn to investigate it
-    mugloarStore.peopleReputation = 0;
-    mugloarStore.stateReputation = 0;
-    mugloarStore.underworldReputation = 0;
-  });
-
   const solveMessage = withHandling(async (adId: string) => {
     const response = await $fetch<MessageSolveResponse>(
       `/api/${mugloarStore.gameId}/solve/${adId}`,
@@ -113,10 +113,10 @@ export const useMugloar = () => {
   );
 
   return {
+    startGame,
     investigateReputation,
     fetchMessages,
     fetchShopItems,
-    startGame,
     solveMessage,
     buyShopItem,
     isGameStarted,
