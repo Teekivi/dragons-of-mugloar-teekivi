@@ -23,4 +23,9 @@ export default defineNuxtConfig({
       websocket: true,
     },
   },
+  vite: {
+    resolve: {
+      tsconfigPaths: true,
+    },
+  },
 });
