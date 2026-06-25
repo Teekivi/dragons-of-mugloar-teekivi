@@ -14,5 +14,7 @@ export const useMugloarStore = defineStore('mugloarStore', {
 
     messages: [] as Message[],
     shopItems: [] as ShopItem[],
+
+    isAutoplayActive: false,
   }),
 });

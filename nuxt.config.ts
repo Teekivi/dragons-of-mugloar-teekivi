@@ -2,7 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt', '@nuxtjs/google-fonts'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@nuxtjs/google-fonts',
+    '@nuxt/icon',
+  ],
   googleFonts: {
     families: {
       Cinzel: [400, 700],
@@ -12,5 +17,10 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     mugloarBaseUrl: 'https://dragonsofmugloar.com/api/v2',
+  },
+  nitro: {
+    experimental: {
+      websocket: true,
+    },
   },
 });
