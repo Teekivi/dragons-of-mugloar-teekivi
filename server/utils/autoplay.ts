@@ -57,60 +57,21 @@ const executeAutoplay = async (
   while (activeGameIds.has(gameId) && state.lives > 0) {
     const shopItems = await getShopItems(gameId);
     peer.send(JSON.stringify({ type: 'stateUpdate', data: { shopItems } }));
+
     if (state.lives < 3) {
-      const healingPotion = shopItems.find(
-        (item) => item.id === ShopItemId.HEALING_POTION,
+      const bought = await tryToBuyHealingPotion(
+        gameId,
+        shopItems,
+        peer,
+        state,
       );
-      if (healingPotion && state.gold >= healingPotion.cost) {
-        peer.send(
-          JSON.stringify({
-            type: 'shopItemStateUpdate',
-            data: { id: healingPotion.id, state: ItemState.CHOSEN },
-          }),
-        );
-        const buyResponse = await buyShopItem(gameId, healingPotion.id);
-        peer.send(
-          JSON.stringify({
-            type: 'shopItemStateUpdate',
-            data: {
-              id: healingPotion.id,
-              state: buyResponse.shoppingSuccess
-                ? ItemState.SUCCESS
-                : ItemState.FAILED,
-            },
-          }),
-        );
-        peer.send(JSON.stringify({ type: 'stateUpdate', data: buyResponse }));
-        Object.assign(state, buyResponse);
+      if (bought) {
         await sleep(1000);
         continue;
       }
     }
-    const messages = await getMessages(gameId);
-    peer.send(JSON.stringify({ type: 'stateUpdate', data: { messages } }));
-    const message = pickMessageToSolve(messages);
-    if (!message) {
-      console.log(`No message to solve for game ${gameId}`);
-      break;
-    }
-    peer.send(
-      JSON.stringify({
-        type: 'messageStateUpdate',
-        data: { adId: message.adId, state: ItemState.CHOSEN },
-      }),
-    );
-    const solveResponse = await solveMessage(gameId, message.adId);
-    peer.send(
-      JSON.stringify({
-        type: 'messageStateUpdate',
-        data: {
-          adId: message.adId,
-          state: solveResponse.success ? ItemState.SUCCESS : ItemState.FAILED,
-        },
-      }),
-    );
-    peer.send(JSON.stringify({ type: 'stateUpdate', data: solveResponse }));
-    Object.assign(state, solveResponse);
+
+    await tryToSolveAMessage(gameId, peer, state);
     await sleep(1000);
   }
 
@@ -122,6 +83,73 @@ const executeAutoplay = async (
       }),
     );
   }
+};
+
+const tryToBuyHealingPotion = async (
+  gameId: string,
+  shopItems: ShopItem[],
+  peer: Peer,
+  state: AutoplayInputState,
+) => {
+  const healingPotion = shopItems.find(
+    (item) => item.id === ShopItemId.HEALING_POTION,
+  );
+  if (healingPotion && state.gold >= healingPotion.cost) {
+    peer.send(
+      JSON.stringify({
+        type: 'shopItemStateUpdate',
+        data: { id: healingPotion.id, state: ItemState.CHOSEN },
+      }),
+    );
+    const buyResponse = await buyShopItem(gameId, healingPotion.id);
+    peer.send(
+      JSON.stringify({
+        type: 'shopItemStateUpdate',
+        data: {
+          id: healingPotion.id,
+          state: buyResponse.shoppingSuccess
+            ? ItemState.SUCCESS
+            : ItemState.FAILED,
+        },
+      }),
+    );
+    peer.send(JSON.stringify({ type: 'stateUpdate', data: buyResponse }));
+    Object.assign(state, buyResponse);
+    return buyResponse.shoppingSuccess;
+  }
+  return false;
+};
+
+const tryToSolveAMessage = async (
+  gameId: string,
+  peer: Peer,
+  state: AutoplayInputState,
+) => {
+  const messages = await getMessages(gameId);
+  peer.send(JSON.stringify({ type: 'stateUpdate', data: { messages } }));
+  const message = pickMessageToSolve(messages);
+  if (!message) {
+    console.log(`No message to solve for game ${gameId}`);
+    return;
+  }
+  peer.send(
+    JSON.stringify({
+      type: 'messageStateUpdate',
+      data: { adId: message.adId, state: ItemState.CHOSEN },
+    }),
+  );
+  const solveResponse = await solveMessage(gameId, message.adId);
+  peer.send(
+    JSON.stringify({
+      type: 'messageStateUpdate',
+      data: {
+        adId: message.adId,
+        state: solveResponse.success ? ItemState.SUCCESS : ItemState.FAILED,
+      },
+    }),
+  );
+  peer.send(JSON.stringify({ type: 'stateUpdate', data: solveResponse }));
+  Object.assign(state, solveResponse);
 };
 
 const pickMessageToSolve = (messages: Message[]): Message | null => {
