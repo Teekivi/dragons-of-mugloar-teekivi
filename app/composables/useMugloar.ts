@@ -57,6 +57,10 @@ export const useMugloar = () => {
         method: 'POST',
       },
     );
+    const message = mugloarStore.messages.find((msg) => msg.adId === adId);
+    if (message) {
+      message.state = response.success ? ItemState.SUCCESS : ItemState.FAILED;
+    }
     mugloarStore.$patch(response);
     await fetchMessages();
   });

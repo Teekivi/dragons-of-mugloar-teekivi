@@ -71,7 +71,13 @@ const noShopItemsMessage = computed(() => {
         :noItemsMessage="noTasksMessage"
         @refresh="fetchMessages"
       >
-        <Task v-for="task in store.messages" :key="task.adId" v-bind="task" />
+        <TransitionGroup
+          tag="div"
+          leave-active-class="transition-all duration-300 ease-in"
+          leave-to-class="opacity-0 -translate-x-5"
+        >
+          <Task v-for="task in store.messages" :key="task.adId" v-bind="task" />
+        </TransitionGroup>
       </GameSection>
       <GameSection
         class="flex-1"
