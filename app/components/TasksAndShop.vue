@@ -73,6 +73,8 @@ const noShopItemsMessage = computed(() => {
       >
         <TransitionGroup
           tag="div"
+          enter-active-class="transition-all duration-300 ease-in opacity-0 -translate-x-5"
+          enter-to-class="opacity-100 translate-x-0"
           leave-active-class="transition-all duration-300 ease-in"
           leave-to-class="opacity-0 -translate-x-5"
         >
