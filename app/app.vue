@@ -8,7 +8,7 @@ useHead({
   },
 });
 
-const { startGame, isLoading, isGameOver } = useMugloar();
+const { isGameOver } = useMugloar();
 
 const isGameOverOverlayOpen = ref(false);
 watch(isGameOver, (newValue) => {
@@ -23,13 +23,7 @@ watch(isGameOver, (newValue) => {
     class="mx-auto my-8 flex max-w-[1500px] flex-col items-start gap-4 rounded-xl bg-amber-900 p-4"
   >
     <h1 class="font-cinzel text-xl text-amber-300">Dragons of Mugloar</h1>
-    <div class="flex items-center gap-2">
-      <Button :disabled="isLoading" @click="startGame">New Game</Button>
-      <div v-if="isGameOver" class="font-crimson text-white">
-        Game Over. Start a new one?
-      </div>
-    </div>
-
+    <GameControlsRow />
     <StateDisplay />
     <TasksAndShop />
 
