@@ -24,6 +24,22 @@ export const useAutoplay = () => {
         const parsed = JSON.parse(event.data);
         if (parsed.type === 'stateUpdate') {
           mugloarStore.$patch(parsed.data);
+        } else if (parsed.type === 'messageStateUpdate') {
+          const { adId, state } = parsed.data;
+          const message = mugloarStore.messages.find(
+            (msg) => msg.adId === adId,
+          );
+          if (message) {
+            message.state = state;
+          }
+        } else if (parsed.type === 'shopItemStateUpdate') {
+          const { id, state } = parsed.data;
+          const shopItem = mugloarStore.shopItems.find(
+            (item) => item.id === id,
+          );
+          if (shopItem) {
+            shopItem.state = state;
+          }
         }
       };
       autoplayWs.onclose = () => {

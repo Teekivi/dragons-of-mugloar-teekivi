@@ -16,3 +16,9 @@ export enum ShopItemId {
   BOOK_OF_MEGATRICKS = 'mtrix',
   POTION_OF_AWESOME_WINGS = 'wingpotmax',
 }
+
+export enum ItemState {
+  CHOSEN = 'chosen',
+  SUCCESS = 'success',
+  FAILED = 'failed',
+}

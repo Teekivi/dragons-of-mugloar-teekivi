@@ -1,3 +1,5 @@
+import type { WithState } from '~/types/mugloar';
+
 export const useMugloarStore = defineStore('mugloarStore', {
   state: () => ({
     gameId: null as string | null,
@@ -12,8 +14,8 @@ export const useMugloarStore = defineStore('mugloarStore', {
     stateReputation: 0,
     underworldReputation: 0,
 
-    messages: [] as Message[],
-    shopItems: [] as ShopItem[],
+    messages: [] as WithState<Message>[],
+    shopItems: [] as WithState<ShopItem>[],
 
     isAutoplayActive: false,
   }),

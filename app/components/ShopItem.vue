@@ -3,6 +3,7 @@ const { id, name, cost } = defineProps<{
   id: string;
   name: string;
   cost: number;
+  state?: ItemState;
 }>();
 
 const toastsStore = useToastsStore();
@@ -25,6 +26,7 @@ const handleBuyShopItem = async () => {
     :sublabel="`Cost: ${cost} gold`"
     :buttonLabel="'Buy'"
     :buttonDisabled="isLoading || !isGameManuallyPlayable"
+    :state="state"
     @buttonClick="handleBuyShopItem"
   />
 </template>

@@ -6,6 +6,7 @@ const { reward, expiresIn, probability, encrypted } = defineProps<{
   expiresIn: number;
   encrypted: number | null;
   probability: string;
+  state?: ItemState;
 }>();
 
 const { solveMessage, isLoading, isGameManuallyPlayable } = useMugloar();
@@ -42,6 +43,7 @@ const sublabel = computed(() =>
     :sublabel="sublabel"
     :buttonLabel="'Solve'"
     :buttonDisabled="isLoading || !isGameManuallyPlayable"
+    :state="state"
     @buttonClick="solveMessage(adId)"
   />
 </template>

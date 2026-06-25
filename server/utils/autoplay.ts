@@ -1,4 +1,5 @@
 import type { Peer } from 'crossws';
+import { ItemState } from '~~/shared/types/mugloarEnums';
 
 const gameIdToPeer = new Map<string, Peer>();
 const activeGameIds = new Set<string>();
@@ -54,13 +55,31 @@ const executeAutoplay = async (
   );
 
   while (activeGameIds.has(gameId) && state.lives > 0) {
+    const shopItems = await getShopItems(gameId);
+    peer.send(JSON.stringify({ type: 'stateUpdate', data: { shopItems } }));
     if (state.lives < 3) {
-      const shopItems = await getShopItems(gameId);
       const healingPotion = shopItems.find(
         (item) => item.id === ShopItemId.HEALING_POTION,
       );
       if (healingPotion && state.gold >= healingPotion.cost) {
+        peer.send(
+          JSON.stringify({
+            type: 'shopItemStateUpdate',
+            data: { id: healingPotion.id, state: ItemState.CHOSEN },
+          }),
+        );
         const buyResponse = await buyShopItem(gameId, healingPotion.id);
+        peer.send(
+          JSON.stringify({
+            type: 'shopItemStateUpdate',
+            data: {
+              id: healingPotion.id,
+              state: buyResponse.shoppingSuccess
+                ? ItemState.SUCCESS
+                : ItemState.FAILED,
+            },
+          }),
+        );
         peer.send(JSON.stringify({ type: 'stateUpdate', data: buyResponse }));
         Object.assign(state, buyResponse);
         await sleep(1000);
@@ -74,7 +93,22 @@ const executeAutoplay = async (
       console.log(`No message to solve for game ${gameId}`);
       break;
     }
+    peer.send(
+      JSON.stringify({
+        type: 'messageStateUpdate',
+        data: { adId: message.adId, state: ItemState.CHOSEN },
+      }),
+    );
     const solveResponse = await solveMessage(gameId, message.adId);
+    peer.send(
+      JSON.stringify({
+        type: 'messageStateUpdate',
+        data: {
+          adId: message.adId,
+          state: solveResponse.success ? ItemState.SUCCESS : ItemState.FAILED,
+        },
+      }),
+    );
     peer.send(JSON.stringify({ type: 'stateUpdate', data: solveResponse }));
     Object.assign(state, solveResponse);
     await sleep(1000);
