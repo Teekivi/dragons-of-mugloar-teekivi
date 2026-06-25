@@ -64,6 +64,7 @@ const executeAutoplay = async (
         peer.send(JSON.stringify({ type: 'stateUpdate', data: buyResponse }));
         Object.assign(state, buyResponse);
         await sleep(1000);
+        continue;
       }
     }
     const messages = await getMessages(gameId);
