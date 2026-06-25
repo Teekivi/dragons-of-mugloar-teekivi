@@ -66,13 +66,13 @@ const executeAutoplay = async (
         state,
       );
       if (bought) {
-        await sleep(1000);
+        await sleep(500);
         continue;
       }
     }
 
     await tryToSolveAMessage(gameId, peer, state);
-    await sleep(1000);
+    await sleep(500);
   }
 
   if (peer) {
