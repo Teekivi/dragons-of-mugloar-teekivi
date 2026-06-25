@@ -46,6 +46,9 @@ export const useMugloar = () => {
     mugloarStore.peopleReputation = response.people;
     mugloarStore.stateReputation = response.state;
     mugloarStore.underworldReputation = response.underworld;
+    // optimistically increment the turn, as the endpoint doesn't return it
+    mugloarStore.turn += 1;
+    await fetchMessages();
   });
 
   const fetchMessages = withHandling(async () => {
