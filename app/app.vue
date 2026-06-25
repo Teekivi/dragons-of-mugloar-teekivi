@@ -7,15 +7,6 @@ useHead({
     class: 'bg-amber-950',
   },
 });
-
-const { isGameOver } = useMugloar();
-
-const isGameOverOverlayOpen = ref(false);
-watch(isGameOver, (newValue) => {
-  if (newValue) {
-    isGameOverOverlayOpen.value = true;
-  }
-});
 </script>
 
 <template>
@@ -27,10 +18,7 @@ watch(isGameOver, (newValue) => {
     <StateDisplay />
     <TasksAndShop />
 
-    <GameOverOverlay
-      :isOpen="isGameOverOverlayOpen"
-      @close="isGameOverOverlayOpen = false"
-    />
+    <GameOverOverlay />
     <ToastsOverlay />
   </div>
 </template>
