@@ -1,23 +1,25 @@
-# Nuxt Minimal Starter
+# Dragons of Mugloar
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Implemented by Magnus Teekivi using the API https://dragonsofmugloar.com/doc/.
+
+Highlights:
+
+- The implementation uses Nuxt and Tailwind CSS.
+- Responsiveness: on wider screens the tasks and shop items sections are shown side-by-side. On smaller screens tabs are shown.
+- Both manual play and autoplay are supported.
+- During an active game, autoplay can be started and stopped at any time, allowing to mix autoplay and manual play.
+- The actions of backend-side autoplay are shown in realtime by utilizing a WebSocket.
+
+## Introduction
 
 ## Setup
+
+It is recommended to use latest version of Node v24.
 
 Make sure to install dependencies:
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
 ## Development Server
@@ -25,17 +27,15 @@ bun install
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
 npm run dev
+```
 
-# pnpm
-pnpm dev
+## Run Tests
 
-# yarn
-yarn dev
+Run unit tests:
 
-# bun
-bun run dev
+```bash
+npm run test
 ```
 
 ## Production
@@ -43,33 +43,11 @@ bun run dev
 Build the application for production:
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
 Locally preview production build:
 
 ```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
