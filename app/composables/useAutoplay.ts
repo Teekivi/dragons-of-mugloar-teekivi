@@ -3,6 +3,7 @@ let autoplayWs: WebSocket | null = null;
 export const useAutoplay = () => {
   const mugloarStore = useMugloarStore();
   const { withHandling, isLoading } = useWithHandling();
+  const { fetchMessages } = useMugloar();
 
   const connectWs = (gameId: string): Promise<void> =>
     new Promise((resolve, reject) => {
@@ -66,6 +67,9 @@ export const useAutoplay = () => {
     if (autoplayWs) {
       autoplayWs.close();
       autoplayWs = null;
+    }
+    if (!gameIdOverride) {
+      await fetchMessages();
     }
   });
 
