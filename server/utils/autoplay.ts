@@ -152,7 +152,7 @@ const tryToSolveAMessage = async (
   Object.assign(state, solveResponse);
 };
 
-const pickMessageToSolve = (messages: Message[]): Message | null => {
+export const pickMessageToSolve = (messages: Message[]): Message | null => {
   if (!messages.length) {
     return null;
   }
